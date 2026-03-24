@@ -80,7 +80,7 @@ if __name__ == "__main__":
         inputs=(dummy, input_lengths),
         audio_duration_sec=duration,
         num_warmup=10,
-        num_runs=30 # 論文用には50〜100回程度回すと値が安定します
+        num_runs=100 # 論文用には50〜100回程度回すと値が安定します
     )
 
     print(f"Average Latency : {mean_ms:.2f} ± {std_ms:.2f} ms")
