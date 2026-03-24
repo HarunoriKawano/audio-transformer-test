@@ -10,7 +10,7 @@ from fvcore.nn import FlopCountAnalysis, flop_count_table
 if __name__ == '__main__':
     wav2vec2 = torchaudio.models.wav2vec2_base().eval()
     vit = ViT(768, 8, 12).eval()
-    save_dir = "save_dir/transfer/voxceleb1"
+    save_dir = "save_dir/finetuning/gsc_v1"
     config_path = f"{save_dir}/config.json"
     model_config_path = f"{save_dir}/encoder_config.json"
     config = json_to_instance(config_path, Config)
