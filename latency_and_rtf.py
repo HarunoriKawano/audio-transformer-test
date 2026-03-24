@@ -7,6 +7,7 @@ import torchaudio
 from audioencoder import Config as EncoderConfig
 from utils.others.json_to_instance import json_to_instance
 import tqdm
+import resource
 
 # 論文用の公平な比較のため、CPUのスレッド数を1に固定（必須）
 torch.set_num_threads(1)
@@ -29,30 +30,45 @@ def measure_cpu_latency_and_rtf(model, inputs, audio_duration_sec, num_warmup=10
     """
     model.eval()
 
+        # ==========================================
+    # 2. ウォームアップ（CPUのキャッシュを安定させる）
+    # ==========================================
+    print("ウォームアップを実行中...")
     with torch.no_grad():
-        # 1. ウォームアップ（CPUキャッシュの初期化オーバーヘッドを除外するため）
         for _ in tqdm.tqdm(range(num_warmup)):
             _ = model(*inputs)
 
-        # 2. 本計測
-        latencies = []
+    # ==========================================
+    # 3. 本計測（RTF と ピークメモリ）
+    # ==========================================
+    print("推論速度（RTF）およびピークメモリを計測中...")
+    total_time = 0.0
+
+    with torch.no_grad():
         for _ in tqdm.tqdm(range(num_runs)):
-            start_time = time.perf_counter() # 高精度タイマー
+            start_time = time.time()
             _ = model(*inputs)
-            end_time = time.perf_counter()
+            end_time = time.time()
+            total_time += (end_time - start_time)
 
-            # 秒からミリ秒に変換して記録
-            latencies.append((end_time - start_time) * 1000)
+    # --- ピークメモリの取得 ---
+    # Linux環境(GCP Ubuntu等)では ru_maxrss はキロバイト(KB)単位で返ってきます
+    # MB（メガバイト）に変換するために 1024 で割ります
+    peak_memory_kb = resource.getrusage(resource.RUSAGE_SELF).ru_maxrss
+    peak_memory_mb = peak_memory_kb / 1024.0
 
-    # 3. 統計値とRTFの計算
-    mean_latency_ms = np.mean(latencies)
-    std_latency_ms = np.std(latencies)
+    # --- RTFの計算 ---
+    avg_inference_time = total_time / num_runs
+    rtf = avg_inference_time / audio_duration_sec
 
-    # RTF = 推論にかかった時間(秒) / 実際の音声長(秒)
-    mean_latency_sec = mean_latency_ms / 1000.0
-    rtf = mean_latency_sec / audio_duration_sec
-
-    return mean_latency_ms, std_latency_ms, rtf
+    # ==========================================
+    # 4. 結果出力
+    # ==========================================
+    print("\n" + "="*20 + " 最終結果 " + "="*20)
+    print(f"Average Inference Time : {avg_inference_time:.4f} seconds")
+    print(f"RTF (Real-Time Factor) : {rtf:.4f}")
+    print(f"Peak Memory Footprint  : {peak_memory_mb:.2f} MB")
+    print("="*50)
 
 
 # ==========================================
@@ -72,21 +88,13 @@ if __name__ == "__main__":
 
     duration = 10
 
-    dummy = torch.rand(1, 16000 * duration)
+    dummy = torch.rand(1,1,  16000 * duration)
     input_lengths = torch.tensor([16000 * duration])
 
-    mean_ms, std_ms, rtf = measure_cpu_latency_and_rtf(
-        model=wav2vec2,
-        inputs=(dummy, ),
+    measure_cpu_latency_and_rtf(
+        model=model,
+        inputs=(dummy, input_lengths),
         audio_duration_sec=duration,
         num_warmup=10,
         num_runs=100 # 論文用には50〜100回程度回すと値が安定します
     )
-
-    print(f"Average Latency : {mean_ms:.2f} ± {std_ms:.2f} ms")
-    print(f"Real-Time Factor: {rtf:.3f}")
-
-    if rtf < 1.0:
-        print("=> RTFが1.0未満のため、リアルタイム処理が可能です！")
-    else:
-        print("=> RTFが1.0以上のため、実際の時間より処理に時間がかかっています。")
