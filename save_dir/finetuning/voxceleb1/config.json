@@ -1,0 +1,6 @@
+{
+  "hidden_size": 384,
+  "dropout_rate": 0.25,
+  "num_classes":  1251,
+  "max_length": 1500
+}

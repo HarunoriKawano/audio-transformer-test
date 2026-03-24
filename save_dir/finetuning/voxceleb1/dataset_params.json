@@ -1,0 +1,5 @@
+{
+  "train_metadata_path": "/mnt/storage/audio-encoder-project/voxceleb1/vox1_speaker_identification_official_train.csv",
+  "eval_metadata_path": "/mnt/storage/audio-encoder-project/voxceleb1/vox1_speaker_identification_official_val.csv",
+  "test_metadata_path": "/mnt/storage/audio-encoder-project/voxceleb1/vox1_speaker_identification_official_test.csv"
+}
