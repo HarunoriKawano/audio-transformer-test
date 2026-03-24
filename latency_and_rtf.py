@@ -76,8 +76,8 @@ if __name__ == "__main__":
     input_lengths = torch.tensor([16000 * duration])
 
     mean_ms, std_ms, rtf = measure_cpu_latency_and_rtf(
-        model=model,
-        inputs=(dummy, input_lengths),
+        model=vit,
+        inputs=(dummy, ),
         audio_duration_sec=duration,
         num_warmup=10,
         num_runs=100 # 論文用には50〜100回程度回すと値が安定します
