@@ -72,11 +72,11 @@ if __name__ == "__main__":
 
     duration = 10
 
-    dummy = torch.rand(1, 1, 16000 * duration)
+    dummy = torch.rand(1, 16000 * duration)
     input_lengths = torch.tensor([16000 * duration])
 
     mean_ms, std_ms, rtf = measure_cpu_latency_and_rtf(
-        model=vit,
+        model=wav2vec2,
         inputs=(dummy, ),
         audio_duration_sec=duration,
         num_warmup=10,
