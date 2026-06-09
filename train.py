@@ -4,7 +4,7 @@ import argparse
 import torch
 import pandas as pd
 
-from model import Config, Model
+from model_with_spec import Config, Model
 from train_framework import TrainFramework, LearningSettings
 from dataset import DatasetParams, get_dataset
 from utils.others.json_to_instance import json_to_instance
@@ -26,7 +26,7 @@ if __name__ == '__main__':
     os.environ['MASTER_ADDR'] = args.master_addr
     os.environ['MASTER_PORT'] = args.master_port
 
-    save_dir = "save_dir/without_spectrum/gsc_v1"
+    save_dir = "save_dir/mask_rate_03/voxceleb1"
     config_path = f"{save_dir}/config.json"
     model_config_path = f"{save_dir}/encoder_config.json"
     ls_path = f"{save_dir}/learning_settings.json"
@@ -45,7 +45,7 @@ if __name__ == '__main__':
     set_random_seed(seed)
     accuracy_list = []
     model = Model(encoder_config, config)
-    model.encoder.load_state_dict(torch.load("save_dir/trained_weights/encoder_weight.pth"))
+    model.encoder.encoder.load_state_dict(torch.load("save_dir/trained_weights/encoder_weight_03.pth"))
     preprocessor = Preprocessor(encoder_config)
 
     train_dataset, eval_dataset, test_dataset = get_dataset(dp)

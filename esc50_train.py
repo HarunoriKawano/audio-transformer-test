@@ -26,7 +26,7 @@ if __name__ == '__main__':
     os.environ['MASTER_ADDR'] = args.master_addr
     os.environ['MASTER_PORT'] = args.master_port
 
-    save_dir = "save_dir/transfer/esc50"
+    save_dir = "save_dir/mask_rate_05/esc50"
     config_path = f"{save_dir}/config.json"
     model_config_path = f"{save_dir}/encoder_config.json"
     ls_path = f"{save_dir}/learning_settings.json"
@@ -46,7 +46,7 @@ if __name__ == '__main__':
     accuracy_list = []
     for i in range(5):
         model = Model(encoder_config, config)
-        model.encoder.encoder.load_state_dict(torch.load("save_dir/trained_weights/encoder_weight.pth"))
+        model.encoder.encoder.load_state_dict(torch.load("save_dir/trained_weights/encoder_weight_05.pth"))
 
         train_dataset, eval_dataset = get_esc50_dataset(dp, target_index=i)
         trainer = TrainFramework(model, ls, train_dataset, eval_dataset)

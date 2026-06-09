@@ -1,0 +1,10 @@
+{
+  "hidden_size": 384,
+  "intermediate_size": 1536,
+  "num_attention_heads": 4,
+  "num_transformer_layers": 6,
+  "max_length": 300,
+  "dropout_probability": 0.1,
+  "spectrogram_sampling_rate": 16000,
+  "spectrogram_n_fft": 1024
+}

@@ -1,0 +1,6 @@
+{
+  "batch_size": 64,
+  "learning_rate": 3e-4,
+  "max_epoch_num": 30,
+  "mixed_precision": false
+}

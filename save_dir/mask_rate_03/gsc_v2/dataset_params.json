@@ -1,0 +1,5 @@
+{
+  "train_metadata_path": "/mnt/storage/audio-encoder-project/google_speech_commands_v2/train_metadata.csv",
+  "eval_metadata_path": "/mnt/storage/audio-encoder-project/google_speech_commands_v2/val_metadata.csv",
+  "test_metadata_path": "/mnt/storage/audio-encoder-project/google_speech_commands_v2/test_metadata.csv"
+}

@@ -1,0 +1,9 @@
+{
+  "metadata_paths": [
+    "/mnt/storage/audio-encoder-project/esc50/esc50_fold1_metadata.csv",
+    "/mnt/storage/audio-encoder-project/esc50/esc50_fold2_metadata.csv",
+    "/mnt/storage/audio-encoder-project/esc50/esc50_fold3_metadata.csv",
+    "/mnt/storage/audio-encoder-project/esc50/esc50_fold4_metadata.csv",
+    "/mnt/storage/audio-encoder-project/esc50/esc50_fold5_metadata.csv"
+  ]
+}
