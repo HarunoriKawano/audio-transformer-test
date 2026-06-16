@@ -88,7 +88,7 @@ if __name__ == "__main__":
 
     duration = 10
 
-    dummy = torch.rand(1,  16000 * duration)
+    dummy = torch.rand(16000 * duration)
     input_lengths = torch.tensor([16000 * duration])
 
     measure_cpu_latency_and_rtf(
