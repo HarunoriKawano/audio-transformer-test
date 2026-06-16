@@ -88,12 +88,12 @@ if __name__ == "__main__":
 
     duration = 10
 
-    dummy = torch.rand(1,  16000 * duration)
+    dummy = torch.rand(1, 1,  16000 * duration)
     input_lengths = torch.tensor([16000 * duration])
 
     measure_cpu_latency_and_rtf(
-        model=model,
-        inputs=(dummy, input_lengths),
+        model=vit,
+        inputs=(dummy, ),
         audio_duration_sec=duration,
         num_warmup=10,
         num_runs=100 # 論文用には50〜100回程度回すと値が安定します
