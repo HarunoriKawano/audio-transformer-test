@@ -92,7 +92,7 @@ if __name__ == "__main__":
     input_lengths = torch.tensor([16000 * duration])
 
     measure_cpu_latency_and_rtf(
-        model=wav2vec2,
+        model=vit,
         inputs=(dummy,),
         audio_duration_sec=duration,
         num_warmup=10,
